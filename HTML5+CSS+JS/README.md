@@ -17,7 +17,9 @@ This step-by-step guide teaches modern web fundamentals using your own notes and
 11. Modules and Script Loading
 12. Small DOM Mini-Projects
 13. JavaScript OOP (Classes, Prototypes, Inheritance)
-14. Next Steps
+14. More JavaScript Language Features
+15. Timers and Async (Callbacks, Promises, Async/Await)
+16. Next Steps
 
 ---
 
@@ -328,6 +330,23 @@ function one() {
   document.querySelector('.result').innerHTML = '1'
 }
 function twoCalc() {
+  document.querySelector('.result').innerHTML = '2'
+}
+```
+
+Heads/Tails and name submit (commented in your file) give simple examples of conditionals and input handling:
+
+```js
+function heads() {
+  document.querySelector('p').innerText = 'You chose: heads'
+}
+function tails() {
+  document.querySelector('p').innerText = 'You chose: tails'
+}
+```
+
+---
+
 ## 13) JavaScript OOP (Classes, Prototypes, Inheritance)
 
 This section summarizes core OOP ideas from your `Web Dev/JS Basic/OOP` folder (classes, constructors, inheritance, encapsulation, polymorphism, prototypes, and prototypal inheritance).
@@ -350,6 +369,7 @@ console.log(p.greet())
 ```
 
 Key points:
+
 - `constructor` initializes instance fields.
 - Methods defined in the class body live on `Person.prototype`.
 
@@ -357,11 +377,15 @@ Key points:
 
 ```js
 class Animal {
-  speak() { return 'generic sound' }
+  speak() {
+    return 'generic sound'
+  }
 }
 
 class Dog extends Animal {
-  speak() { return 'woof' } // override
+  speak() {
+    return 'woof'
+  } // override
 }
 
 const a = new Animal()
@@ -380,14 +404,21 @@ Use closures or convention/fields to hide details and expose a simple API.
 function createCounter() {
   let value = 0 // private via closure
   return {
-    inc() { value++ },
-    dec() { value-- },
-    get() { return value },
+    inc() {
+      value++
+    },
+    dec() {
+      value--
+    },
+    get() {
+      return value
+    },
   }
 }
 
 const c = createCounter()
-c.inc(); c.inc();
+c.inc()
+c.inc()
 console.log(c.get()) // 2
 ```
 
@@ -396,8 +427,12 @@ In modern JS classes you can also use `#privateField` syntax:
 ```js
 class BankAccount {
   #balance = 0
-  deposit(amount) { if (amount > 0) this.#balance += amount }
-  get balance() { return this.#balance }
+  deposit(amount) {
+    if (amount > 0) this.#balance += amount
+  }
+  get balance() {
+    return this.#balance
+  }
 }
 ```
 
@@ -407,7 +442,9 @@ class BankAccount {
 function Car(make) {
   this.make = make
 }
-Car.prototype.honk = function () { return `${this.make} says beep` }
+Car.prototype.honk = function () {
+  return `${this.make} says beep`
+}
 
 const c1 = new Car('Toyota')
 console.log(c1.honk()) // Toyota says beep
@@ -416,7 +453,11 @@ console.log(c1.honk()) // Toyota says beep
 Linking objects directly with `Object.create`:
 
 ```js
-const vehicle = { move() { return 'moving' } }
+const vehicle = {
+  move() {
+    return 'moving'
+  },
+}
 const bike = Object.create(vehicle)
 bike.ring = () => 'tring tring'
 console.log(bike.move(), bike.ring())
@@ -435,32 +476,95 @@ class Api {
 ```
 
 Takeaways:
+
 - Prefer classes for modeling entities; inherit for shared behavior.
 - For composition-heavy needs, favor object composition over deep inheritance.
 - Encapsulate internal state (closures or `#private`) and expose minimal public methods.
 
-  document.querySelector('.result').innerHTML = '2'
+---
 
-## 14) Next Steps
+## 14) More JavaScript Language Features
+
+These topics are reflected across files in `Web Dev/JS Basic` (e.g., `destru-arr.js`, `spread-operator.js`, `rest-parameter.js`, `set.js`, `symbol.js`, `date.js`, `refer-prim.js`, iteration helpers):
+
+- Destructuring:
+
+  ```js
+  const user = { name: 'Alex', age: 29 }
+  const { name, age } = user
+  const arr = [1, 2, 3]
+  const [first, , third] = arr
+  ```
+
+- Spread and Rest:
+
+  ```js
+  const base = [1, 2]
+  const combo = [...base, 3, 4]
+  function sum(...nums) {
+    return nums.reduce((a, b) => a + b, 0)
+  }
+  ```
+
+- Set and Symbol:
+
+  ```js
+  const set = new Set([1, 1, 2]) // {1,2}
+  const sym = Symbol('id')
+  const obj = { [sym]: 123 }
+  ```
+
+- Date basics:
+
+  ```js
+  const now = new Date()
+  now.getFullYear()
+  ```
+
+- Reference vs Primitive (from `refer-prim.js` insight): primitives copy by value; objects/arrays copy references.
+
+---
+
+## 15) Timers and Async (Callbacks, Promises, Async/Await)
+
+Covered across `set-timeout.js`, `set-interval.js`, `promises.js`, `async-await.js`, and `async-callback.js`:
+
+- Timers:
+
+  ```js
+  const id = setInterval(() => console.log('tick'), 1000)
+  setTimeout(() => clearInterval(id), 5000)
+  ```
+
+- Promises and async/await:
+
+  ```js
+  const getData = () => new Promise((res) => setTimeout(() => res('ok'), 500))
+  async function run() {
+    const v = await getData()
+    console.log(v)
+  }
+  run()
+  ```
+
+- Callback pattern:
+
+  ```js
+  function fetchUser(id, cb) {
+    setTimeout(() => cb(null, { id }), 300)
+  }
+  fetchUser(1, (err, u) => {
+    if (err) return console.error(err)
+    console.log(u)
+  })
+  ```
+
+---
+
+## 16) Next Steps
 
 - Explore your `JS Basic/OOP` folder deeper (e.g., `polymorphism.js`, `encapsulation-abstraction.js`).
 - Build a small app combining OOP + DOM: e.g., a Todo with `TodoItem` class and list manager.
 - Add unit tests (e.g., Vitest/Jest) for core functions and class methods.
 
 With these notes and examples, you’ve got a clear foundation in HTML, CSS, and JS—grounded in your own code. Build on it by practicing small features and gradually composing full apps.
-
-Heads/Tails and name submit (commented in your file) give simple examples of conditionals and input handling:
-
-```js
-function heads() {
-  document.querySelector('p').innerText = 'You chose: heads'
-}
-function tails() {
-  document.querySelector('p').innerText = 'You chose: tails'
-}
-```
-
----
-
-With these notes and examples, you’ve got a clear foundation in HTML, CSS, and JS—grounded in your own code. Build on it by practicing small features and gradually composing full apps.
-
